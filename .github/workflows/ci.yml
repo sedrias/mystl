@@ -36,5 +36,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: clang-format
         run: |
-          files=$(find include tests -name '*.hpp' -o -name '*.cpp')
+          files=$(git ls-files '*.hpp' '*.cpp')
           [ -z "$files" ] || clang-format --dry-run --Werror $files
