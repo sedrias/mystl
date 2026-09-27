@@ -24,8 +24,21 @@ else()
         -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Werror)
 endif()
 
+function(mystl_copy_asan_runtime target)
+    if(MSVC AND MYSTL_ENABLE_ASAN)
+        get_filename_component(MSVC_BIN_DIR "${CMAKE_CXX_COMPILER}" DIRECTORY)
+        add_custom_command(TARGET ${target} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${MSVC_BIN_DIR}/clang_rt.asan_dynamic-x86_64.dll"
+                "$<TARGET_FILE_DIR:${target}>"
+        )
+    endif()
+endfunction()
+
 add_library(mystl INTERFACE)
 target_include_directories(mystl INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+add_subdirectory(sandbox)
 
 enable_testing()
 add_subdirectory(tests)
