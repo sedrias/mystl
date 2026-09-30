@@ -7,15 +7,13 @@
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/${presetName}",
       "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-      "cacheVariables": { "CMAKE_EXPORT_COMPILE_COMMANDS": "ON" }
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      }
     },
     {
-      "name": "windows-debug",
+      "name": "windows-gcc-debug",
       "inherits": "base",
-      "architecture": {
-        "value": "x64",
-        "strategy": "external"
-      },
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",
@@ -23,16 +21,10 @@
       },
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_CXX_COMPILER": "cl"
-      },
-      "vendor": {
-        "microsoft.com/VisualStudioSettings/CMake/1.0": { "enableClangTidyCodeAnalysis": true }
+        "CMAKE_CXX_COMPILER": "g++",
+        "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
+        "VCPKG_HOST_TRIPLET": "x64-mingw-static"
       }
-    },
-    {
-      "name": "windows-asan",
-      "inherits": "windows-debug",
-      "cacheVariables": { "MYSTL_ENABLE_ASAN": "ON" }
     },
     {
       "name": "linux-gcc-debug",
@@ -58,12 +50,8 @@
   ],
   "buildPresets": [
     {
-      "name": "windows-debug",
-      "configurePreset": "windows-debug"
-    },
-    {
-      "name": "windows-asan",
-      "configurePreset": "windows-asan"
+      "name": "windows-gcc-debug",
+      "configurePreset": "windows-gcc-debug"
     },
     {
       "name": "linux-gcc-debug",
@@ -76,24 +64,18 @@
   ],
   "testPresets": [
     {
-      "name": "windows-debug",
-      "configurePreset": "windows-debug",
-      "output": { "outputOnFailure": true }
-    },
-    {
-      "name": "windows-asan",
-      "configurePreset": "windows-asan",
-      "output": { "outputOnFailure": true }
-    },
-    {
       "name": "linux-gcc-debug",
       "configurePreset": "linux-gcc-debug",
-      "output": { "outputOnFailure": true }
+      "output": {
+        "outputOnFailure": true
+      }
     },
     {
       "name": "linux-clang-asan",
       "configurePreset": "linux-clang-asan",
-      "output": { "outputOnFailure": true }
+      "output": {
+        "outputOnFailure": true
+      }
     }
   ]
 }

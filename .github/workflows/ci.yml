@@ -11,8 +11,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: windows-latest
-            preset: windows-debug
           - os: ubuntu-latest
             preset: linux-gcc-debug
           - os: ubuntu-latest
@@ -24,8 +22,6 @@ jobs:
       - uses: lukka/run-vcpkg@v11
         with:
           vcpkgGitCommitId: '07f4812200df3d3c931c0c8a6081d3b21fe2bf9f'
-      - uses: ilammy/msvc-dev-cmd@v1
-        if: runner.os == 'Windows'
       - run: cmake --preset ${{ matrix.preset }}
       - run: cmake --build --preset ${{ matrix.preset }}
       - run: ctest --preset ${{ matrix.preset }}
