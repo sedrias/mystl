@@ -12,21 +12,6 @@
       }
     },
     {
-      "name": "windows-gcc-debug",
-      "inherits": "base",
-      "condition": {
-        "type": "equals",
-        "lhs": "${hostSystemName}",
-        "rhs": "Windows"
-      },
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_CXX_COMPILER": "g++",
-        "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
-        "VCPKG_HOST_TRIPLET": "x64-mingw-static"
-      }
-    },
-    {
       "name": "linux-gcc-debug",
       "inherits": "base",
       "condition": {
@@ -49,10 +34,6 @@
     }
   ],
   "buildPresets": [
-    {
-      "name": "windows-gcc-debug",
-      "configurePreset": "windows-gcc-debug"
-    },
     {
       "name": "linux-gcc-debug",
       "configurePreset": "linux-gcc-debug"
