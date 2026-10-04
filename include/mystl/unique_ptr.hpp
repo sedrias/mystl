@@ -11,8 +11,8 @@ template <typename T> class unique_ptr {
     T* get() const { return ptr_; }
     T& operator*() const { return *ptr_; }
     T* operator->() const { return ptr_; }
-    unique_ptr(unique_ptr&& other) : ptr_(other.ptr_) { other.ptr_ = nullptr; }
-    unique_ptr& operator=(unique_ptr&& other) {
+    unique_ptr(unique_ptr&& other) noexcept : ptr_(other.ptr_) { other.ptr_ = nullptr; }
+    unique_ptr& operator=(unique_ptr&& other) noexcept {
         if (this != &other) {
             delete ptr_;
             ptr_ = other.ptr_;
