@@ -1,2 +1,2 @@
 add_executable(sandbox main.cpp)
-target_link_libraries(sandbox PRIVATE mystl)
+target_link_libraries(sandbox PRIVATE ${PROJECT_NAME})

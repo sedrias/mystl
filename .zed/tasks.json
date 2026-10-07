@@ -1,0 +1,10 @@
+[
+  {
+    "label": "Build (gcc debug)",
+    "command": "cmake --build --preset linux-gcc-debug"
+  },
+  {
+    "label": "Run sandbox (gcc debug)",
+    "command": "cmake --build --preset linux-gcc-debug && ./build/linux-gcc-debug/sandbox/sandbox"
+  }
+]
