@@ -3,7 +3,7 @@
 namespace my {
 template <typename T> class unique_ptr {
   private:
-    T* ptr_;
+    T* ptr_{};
 
   public:
     explicit unique_ptr(T* p) : ptr_(p) {}
