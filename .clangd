@@ -1,2 +1,2 @@
 CompileFlags:
-  CompilationDatabase: build/linux-gcc-debug
+  CompilationDatabase: build/debug

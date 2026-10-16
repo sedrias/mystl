@@ -1,27 +1,22 @@
-cmake_minimum_required(VERSION 3.28)
-project(mystl VERSION 0.1.0 LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.25)
+
+project(mystl LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-option(ENABLE_ASAN "Enable AddressSanitizer and UBSan" OFF)
-if(ENABLE_ASAN)
-    add_compile_options(-fsanitize=address,undefined -fno-omit-frame-pointer)
-    add_link_options(-fsanitize=address,undefined)
-endif()
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_library(${PROJECT_NAME}_warnings INTERFACE)
-target_compile_options(${PROJECT_NAME}_warnings
-    INTERFACE -Wall -Wextra -Wpedantic -Wshadow
-    -Wconversion -Wsign-conversion -Werror)
+add_library(mystl INTERFACE)
+target_include_directories(mystl INTERFACE include)
 
-add_library(${PROJECT_NAME} INTERFACE)
-target_include_directories(${PROJECT_NAME} INTERFACE
-    ${CMAKE_CURRENT_SOURCE_DIR}/include)
-
-add_subdirectory(sandbox)
+add_executable(sandbox sandbox/main.cpp)
+target_link_libraries(sandbox PRIVATE mystl)
 
 enable_testing()
+find_package(GTest REQUIRED)
 
-add_subdirectory(tests)
+add_executable(sanity_test tests/sanity_test.cpp)
+target_link_libraries(sanity_test PRIVATE mystl GTest::gtest_main)
+add_test(NAME sanity COMMAND sanity_test)

@@ -12,7 +12,12 @@ template <typename T> class vector {
     [[nodiscard]] std::size_t size() const { return size_; }
     [[nodiscard]] std::size_t capacity() const { return capacity_; }
     ~vector() { delete[] data_; }
-    void push_back(const T& value) { std::size_t new_capacity{capacity_ == 0 ? 1 : capacity_ * 2}; }
+    void push_back(const T& value) {
+        if (size_ == capacity_) {
+            std::size_t new_capacity{capacity_ == 0 ? 1 : capacity_ * 2};
+            T* new_data{new T[new_capacity]};
+        }
+    }
 };
 } // namespace my
 

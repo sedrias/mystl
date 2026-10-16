@@ -1,0 +1,6 @@
+{
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "xaver.clang-format",
+    "files.insertFinalNewline": true,
+    "clangd.arguments": ["--clang-tidy", "--background-index"]
+}

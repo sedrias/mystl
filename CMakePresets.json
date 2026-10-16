@@ -1,56 +1,14 @@
 {
-  "version": 6,
-  "configurePresets": [
-    {
-      "name": "base",
-      "hidden": true,
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/${presetName}",
-      "cacheVariables": {
-        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
-      }
-    },
-    {
-      "name": "linux-gcc-debug",
-      "inherits": "base",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_CXX_COMPILER": "g++"
-      }
-    },
-    {
-      "name": "linux-clang-asan",
-      "inherits": "linux-gcc-debug",
-      "cacheVariables": {
-        "CMAKE_CXX_COMPILER": "clang++",
-        "ENABLE_ASAN": "ON"
-      }
-    }
-  ],
-  "buildPresets": [
-    {
-      "name": "linux-gcc-debug",
-      "configurePreset": "linux-gcc-debug"
-    },
-    {
-      "name": "linux-clang-asan",
-      "configurePreset": "linux-clang-asan"
-    }
-  ],
-  "testPresets": [
-    {
-      "name": "linux-gcc-debug",
-      "configurePreset": "linux-gcc-debug",
-      "output": {
-        "outputOnFailure" : true
-      }
-    },
-    {
-      "name": "linux-clang-asan",
-      "configurePreset": "linux-clang-asan",
-      "output": {
-        "outputOnFailure": true
-      }
-    }
-  ]
+    "version": 6,
+    "configurePresets": [
+        {
+            "name": "debug",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_CXX_FLAGS": "-Wall -Wextra -Wpedantic"
+            }
+        }
+    ]
 }
