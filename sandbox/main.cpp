@@ -41,30 +41,26 @@ template <typename T> class vector {
         }
         return data_[index];
     }
+    void pop_back() {
+        if (size_ == 0) {
+            throw std::out_of_range{"pop_back() size_ is empty"};
+        }
+        --size_;
+    }
+    [[nodiscard]] bool empty() const { return size_ == 0; }
+    void clear() { size_ = 0; }
 };
 } // namespace my
 
 int main() {
-    my::vector<int> test{};
-    test.push_back(10);
-    test.push_back(20);
-    test.push_back(30);
-    std::cout << "test[1]: " << test[1] << '\n';
-    test[1] = 99;
-    std::cout << "test[1]: " << test[1] << '\n';
-    const my::vector<int>& view = test;
-    std::cout << "view[0]: " << view[0] << '\n';
-    std::cout << "test.at(1): " << test.at(1) << '\n';
-    try {
-        std::cout << "test.at(10): " << test.at(10) << '\n';
-    } catch (const std::out_of_range& err) {
-        std::cout << "\tError: " << err.what() << '\n';
-    }
-    std::cout << "view.at(1): " << view.at(1) << '\n';
-    try {
-        std::cout << "view.at(10): " << view.at(10) << '\n';
-    } catch (const std::out_of_range& err) {
-        std::cout << "\tError: " << err.what() << '\n';
-    }
+    my::vector<int> v{};
+    v.push_back(1);
+    v.push_back(2);
+    v.push_back(3);
+    std::cout << "v.size(): " << v.size() << '\n';
+    std::cout << "v.empty(): " << v.empty() << '\n';
+    v.clear();
+    std::cout << "v.size(): " << v.size() << '\n';
+    std::cout << "v.empty(): " << v.empty() << '\n';
     return 0;
 }
