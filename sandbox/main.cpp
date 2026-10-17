@@ -66,14 +66,11 @@ template <typename T> class vector {
             capacity_ = n;
         }
     }
+    T* begin() { return data_; }
+    T* end() { return data_ + size_; }
+    const T* begin() const { return data_; }
+    const T* end() const { return data_ + size_; }
 };
 } // namespace my
 
-int main() {
-    my::vector<int> v;
-    for (int i{0}; i < 25; i += 5) {
-        v.push_back(i);
-        std::cout << "v.capacity(): " << v.capacity() << '\n';
-    }
-    return 0;
-}
+int main() { return 0; }
