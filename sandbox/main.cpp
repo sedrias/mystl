@@ -28,13 +28,7 @@ template <typename T> class vector {
     void push_back(const T& value) {
         if (size_ == capacity_) {
             std::size_t new_capacity{capacity_ == 0 ? 1 : capacity_ * 2};
-            T* new_data{new T[new_capacity]};
-            for (std::size_t i{0}; i < size_; ++i) {
-                new_data[i] = data_[i];
-            }
-            delete[] data_;
-            data_ = new_data;
-            capacity_ = new_capacity;
+            reserve(new_capacity);
         }
         data_[size_] = value;
         ++size_;
@@ -61,16 +55,25 @@ template <typename T> class vector {
     }
     [[nodiscard]] bool empty() const { return size_ == 0; }
     void clear() { size_ = 0; }
+    void reserve(std::size_t n) {
+        if (n > capacity_) {
+            T* new_data{new T[n]};
+            for (std::size_t i{0}; i < size_; ++i) {
+                new_data[i] = data_[i];
+            }
+            delete[] data_;
+            data_ = new_data;
+            capacity_ = n;
+        }
+    }
 };
 } // namespace my
 
 int main() {
-    my::vector<int> v{1, 2, 3};
-    std::cout << "v.size(): " << v.size() << '\n';
-    std::cout << "v.capacity(): " << v.capacity() << '\n';
-    for (std::size_t i = 0; i < 3; ++i) {
-        std::cout << "v[" << i << "]: " << v[i] << '\n';
+    my::vector<int> v;
+    for (int i{0}; i < 25; i += 5) {
+        v.push_back(i);
+        std::cout << "v.capacity(): " << v.capacity() << '\n';
     }
-    my::vector<int> w;
     return 0;
 }
