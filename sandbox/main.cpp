@@ -70,7 +70,20 @@ template <typename T> class vector {
     T* end() { return data_ + size_; }
     const T* begin() const { return data_; }
     const T* end() const { return data_ + size_; }
+    vector(const vector& other) {
+        reserve(other.size());
+        for (std::size_t i{0}; i < other.size(); ++i) {
+            data_[i] = other[i];
+        }
+        size_ = other.size();
+    }
 };
 } // namespace my
 
-int main() { return 0; }
+int main() {
+    my::vector<int> a{1, 2, 3};
+    my::vector<int> b = a;
+    b[0] = 99;
+    std::cout << a[0] << '\n';
+    return 0;
+}
