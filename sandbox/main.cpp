@@ -70,20 +70,31 @@ template <typename T> class vector {
     T* end() { return data_ + size_; }
     const T* begin() const { return data_; }
     const T* end() const { return data_ + size_; }
-    vector(const vector& other) {
+    vector(const vector& other) { *this = other; }
+    vector& operator=(const vector& other) {
+        if (this == &other) {
+            return *this;
+        }
+        clear();
         reserve(other.size());
         for (std::size_t i{0}; i < other.size(); ++i) {
             data_[i] = other[i];
         }
         size_ = other.size();
+        return *this;
     }
 };
 } // namespace my
 
 int main() {
     my::vector<int> a{1, 2, 3};
-    my::vector<int> b = a;
+    my::vector<int> b{7, 8};
+    b = a;
     b[0] = 99;
-    std::cout << a[0] << '\n';
+    std::cout << "a[0]: " << a[0] << '\n';
+    std::cout << "b.size(): " << b.size() << '\n';
+    for (std::size_t i{0}; i < b.size(); ++i) {
+        std::cout << "b[" << i << "]: " << b[i] << '\n';
+    }
     return 0;
 }
