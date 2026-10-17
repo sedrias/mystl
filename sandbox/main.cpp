@@ -2,6 +2,7 @@
 #include <initializer_list>
 #include <iostream>
 #include <stdexcept>
+#include <utility>
 
 namespace my {
 template <typename T> class vector {
@@ -83,18 +84,34 @@ template <typename T> class vector {
         size_ = other.size();
         return *this;
     }
+    vector(vector&& other) noexcept { *this = std::move(other); }
+    vector& operator=(vector&& other) noexcept {
+        if (this == &other) {
+            return *this;
+        }
+        delete[] data_;
+        size_ = other.size_;
+        other.size_ = 0;
+        capacity_ = other.capacity_;
+        other.capacity_ = 0;
+        data_ = other.data_;
+        other.data_ = nullptr;
+        return *this;
+    }
 };
 } // namespace my
 
 int main() {
     my::vector<int> a{1, 2, 3};
-    my::vector<int> b{7, 8};
-    b = a;
-    b[0] = 99;
-    std::cout << "a[0]: " << a[0] << '\n';
+    my::vector<int> b = std::move(a);
+    my::vector<int> c{7, 8};
+    c = std::move(b);
+    std::cout << "a.size(): " << a.size() << '\n';
     std::cout << "b.size(): " << b.size() << '\n';
-    for (std::size_t i{0}; i < b.size(); ++i) {
-        std::cout << "b[" << i << "]: " << b[i] << '\n';
+    std::cout << "c.size(): " << c.size() << '\n';
+    std::cout << "x: ";
+    for (int x : c) {
+        std::cout << x << ' ';
     }
     return 0;
 }
