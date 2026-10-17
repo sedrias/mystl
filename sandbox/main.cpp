@@ -26,20 +26,22 @@ template <typename T> class vector {
         data_[size_] = value;
         ++size_;
     }
+    T& operator[](std::size_t index) { return data_[index]; }
+    const T& operator[](std::size_t index) const { return data_[index]; }
 };
 } // namespace my
 
 int main() {
     my::vector<int> test{};
     test.push_back(10);
-    std::cout << test.size() << '\t' << test.capacity() << '\n';
-    test.push_back(10);
-    std::cout << test.size() << '\t' << test.capacity() << '\n';
-    test.push_back(10);
-    std::cout << test.size() << '\t' << test.capacity() << '\n';
-    test.push_back(10);
-    std::cout << test.size() << '\t' << test.capacity() << '\n';
-    test.push_back(10);
-    std::cout << test.size() << '\t' << test.capacity() << '\n';
+    test.push_back(20);
+    test.push_back(30);
+    std::cout << "test[1]: " << test[1] << '\n';
+    test[1] = 99;
+    std::cout << "test[1]: " << test[1] << '\n';
+    const my::vector<int>& view = test;
+    std::cout << "view[0]: " << view[0] << '\n';
+    // view[0] = 67;
+    // std::cout << view[0];
     return 0;
 }
