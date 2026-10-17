@@ -1,4 +1,5 @@
 #include <cstddef>
+#include <initializer_list>
 #include <iostream>
 #include <stdexcept>
 
@@ -10,6 +11,17 @@ template <typename T> class vector {
     std::size_t capacity_{};
 
   public:
+    vector(std::initializer_list<T> stack) {
+        data_ = new T[stack.size()];
+        capacity_ = stack.size();
+        size_ = stack.size();
+        std::size_t count{0};
+        for (const T& one : stack) {
+            data_[count] = one;
+            ++count;
+        }
+    }
+    vector() = default;
     [[nodiscard]] std::size_t size() const { return size_; }
     [[nodiscard]] std::size_t capacity() const { return capacity_; }
     ~vector() { delete[] data_; }
@@ -53,14 +65,12 @@ template <typename T> class vector {
 } // namespace my
 
 int main() {
-    my::vector<int> v{};
-    v.push_back(1);
-    v.push_back(2);
-    v.push_back(3);
+    my::vector<int> v{1, 2, 3};
     std::cout << "v.size(): " << v.size() << '\n';
-    std::cout << "v.empty(): " << v.empty() << '\n';
-    v.clear();
-    std::cout << "v.size(): " << v.size() << '\n';
-    std::cout << "v.empty(): " << v.empty() << '\n';
+    std::cout << "v.capacity(): " << v.capacity() << '\n';
+    for (std::size_t i = 0; i < 3; ++i) {
+        std::cout << "v[" << i << "]: " << v[i] << '\n';
+    }
+    my::vector<int> w;
     return 0;
 }
