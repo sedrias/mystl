@@ -6,24 +6,42 @@ template <typename T> class shared_ptr {
   private:
     T* ptr_{};
     std::size_t* count_{};
-
-  public:
-    explicit shared_ptr(T* s) : ptr_(s), count_{new std::size_t{1}} {}
-    ~shared_ptr() {
+    void release() {
         --*count_;
         if (*count_ == 0) {
             delete ptr_;
             delete count_;
         }
     }
+
+  public:
+    explicit shared_ptr(T* s) : ptr_(s), count_{new std::size_t{1}} {}
+    ~shared_ptr() { release(); }
     shared_ptr(const shared_ptr& other) : ptr_{other.ptr_}, count_{other.count_} { ++*count_; }
     [[nodiscard]] std::size_t use_count() const { return *count_; }
+    shared_ptr& operator=(const shared_ptr& other) {
+        if (this == &other) {
+            return *this;
+        }
+        release();
+        ptr_ = other.ptr_;
+        count_ = other.count_;
+        ++*count_;
+        return *this;
+    }
+    T& operator*() const { return *ptr_; }
 };
 } // namespace my
 
 int main() {
     my::shared_ptr<int> a{new int{1}};
-    my::shared_ptr<int> b = a;
-    std::cout << a.use_count() << ' ' << b.use_count();
+    my::shared_ptr<int> b{new int{2}};
+    std::cout << "*a: " << *a << '\n' << "*b: " << *b << '\n';
+    std::cout << "a.use_count(): " << a.use_count() << '\n'
+              << "b.use_count(): " << b.use_count() << '\n';
+    b = a;
+    std::cout << "*a: " << *a << '\n' << "*b: " << *b << '\n';
+    std::cout << "a.use_count(): " << a.use_count() << '\n'
+              << "b.use_count(): " << b.use_count() << '\n';
     return 0;
 }
