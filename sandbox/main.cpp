@@ -52,13 +52,9 @@ template <typename T> class shared_ptr {
         other.count_ = nullptr;
         return *this;
     }
+    T* get() const { return ptr_; }
+    T* operator->() const { return ptr_; }
 };
 } // namespace my
 
-int main() {
-    my::shared_ptr<int> a{new int{5}};
-    my::shared_ptr<int> b{std::move(a)};
-    std::cout << "*b: " << *b << '\n' << "b.use_count(): " << b.use_count() << '\n';
-    std::cout << a.use_count();
-    return 0;
-}
+int main() { return 0; }
