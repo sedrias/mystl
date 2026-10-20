@@ -1,18 +1,29 @@
+#include <cstddef>
 #include <iostream>
-#include <mystl/vector.hpp>
-#include <utility>
+
+namespace my {
+template <typename T> class shared_ptr {
+  private:
+    T* ptr_{};
+    std::size_t* count_{};
+
+  public:
+    explicit shared_ptr(T* s) : ptr_(s), count_{new std::size_t{1}} {}
+    ~shared_ptr() {
+        --*count_;
+        if (*count_ == 0) {
+            delete ptr_;
+            delete count_;
+        }
+    }
+    shared_ptr(const shared_ptr& other) : ptr_{other.ptr_}, count_{other.count_} { ++*count_; }
+    [[nodiscard]] std::size_t use_count() const { return *count_; }
+};
+} // namespace my
 
 int main() {
-    my::vector<int> a{1, 2, 3};
-    my::vector<int> b = std::move(a);
-    my::vector<int> c{7, 8};
-    c = std::move(b);
-    std::cout << "a.size(): " << a.size() << '\n';
-    std::cout << "b.size(): " << b.size() << '\n';
-    std::cout << "c.size(): " << c.size() << '\n';
-    std::cout << "x: ";
-    for (int x : c) {
-        std::cout << x << ' ';
-    }
+    my::shared_ptr<int> a{new int{1}};
+    my::shared_ptr<int> b = a;
+    std::cout << a.use_count() << ' ' << b.use_count();
     return 0;
 }
