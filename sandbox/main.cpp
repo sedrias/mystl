@@ -1,5 +1,4 @@
 #include <cstddef>
-#include <iostream>
 #include <utility>
 
 namespace my {
@@ -35,6 +34,9 @@ template <typename T> class shared_ptr {
     shared_ptr() = default;
     ~shared_ptr() { release(); }
     shared_ptr(const shared_ptr& other) : ptr_{other.ptr_}, count_{other.count_} {
+        if (other.count_ == nullptr) {
+            return;
+        }
         ++count_->owners;
     }
     [[nodiscard]] std::size_t use_count() const {
@@ -50,7 +52,9 @@ template <typename T> class shared_ptr {
         release();
         ptr_ = other.ptr_;
         count_ = other.count_;
-        ++count_->owners;
+        if (count_ != nullptr) {
+            ++count_->owners;
+        }
         return *this;
     }
     T& operator*() const { return *ptr_; }
@@ -77,15 +81,21 @@ template <typename T> class weak_ptr {
 
   public:
     explicit weak_ptr(const shared_ptr<T>& w) : ptr_{w.ptr_}, count_{w.count_} {
+        if (w.count_ == nullptr) {
+            return;
+        }
         ++count_->tracking;
     }
     ~weak_ptr() {
+        if (count_ == nullptr) {
+            return;
+        }
         --count_->tracking;
         if (count_->tracking == 0 && count_->owners == 0) {
             delete count_;
         }
     }
-    [[nodiscard]] bool expired() const { return count_->owners == 0; }
+    [[nodiscard]] bool expired() const { return count_ == nullptr || count_->owners == 0; }
     [[nodiscard]] shared_ptr<T> lock() const {
         if (expired()) {
             return shared_ptr<T>{};
@@ -100,13 +110,7 @@ template <typename T> class weak_ptr {
 } // namespace my
 
 int main() {
-    my::shared_ptr<int> s{new int{9}};
-    my::weak_ptr<int> w{s};
-    {
-        my::shared_ptr<int> p{w.lock()};
-        my::shared_ptr<int> tmp{std::move(s)};
-    }
-    my::shared_ptr<int> sp{w.lock()};
-    std::cout << "sp.use_count(): " << sp.use_count() << '\n';
+    my::shared_ptr<int> e;
+    my::shared_ptr<int> c = e;
     return 0;
 }
