@@ -79,14 +79,7 @@ template <typename T> class weak_ptr {
     T* ptr_{};
     control_block* count_{};
 
-  public:
-    explicit weak_ptr(const shared_ptr<T>& w) : ptr_{w.ptr_}, count_{w.count_} {
-        if (w.count_ == nullptr) {
-            return;
-        }
-        ++count_->tracking;
-    }
-    ~weak_ptr() {
+    void release() {
         if (count_ == nullptr) {
             return;
         }
@@ -95,6 +88,16 @@ template <typename T> class weak_ptr {
             delete count_;
         }
     }
+
+  public:
+    explicit weak_ptr(const shared_ptr<T>& w) : ptr_{w.ptr_}, count_{w.count_} {
+        if (w.count_ == nullptr) {
+            return;
+        }
+        ++count_->tracking;
+    }
+    weak_ptr() = default;
+    ~weak_ptr() { release(); }
     [[nodiscard]] bool expired() const { return count_ == nullptr || count_->owners == 0; }
     [[nodiscard]] shared_ptr<T> lock() const {
         if (expired()) {
@@ -106,11 +109,29 @@ template <typename T> class weak_ptr {
         ++count_->owners;
         return result;
     }
+    weak_ptr(const weak_ptr& other) : ptr_(other.ptr_), count_(other.count_) {
+        if (other.count_ == nullptr) {
+            return;
+        }
+        ++count_->tracking;
+    }
+    weak_ptr& operator=(const weak_ptr& other) {
+        if (this == &other) {
+            return *this;
+        }
+        release();
+        ptr_ = other.ptr_;
+        count_ = other.count_;
+        if (count_ != nullptr) {
+            ++count_->tracking;
+        }
+        return *this;
+    }
 };
+;
 } // namespace my
 
 int main() {
-    my::shared_ptr<int> e;
-    my::shared_ptr<int> c = e;
+    my::weak_ptr<int> w;
     return 0;
 }
