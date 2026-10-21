@@ -127,6 +127,18 @@ template <typename T> class weak_ptr {
         }
         return *this;
     }
+    weak_ptr(weak_ptr&& other) noexcept { *this = std::move(other); }
+    weak_ptr& operator=(weak_ptr&& other) noexcept {
+        if (this == &other) {
+            return *this;
+        }
+        release();
+        ptr_ = other.ptr_;
+        count_ = other.count_;
+        other.ptr_ = nullptr;
+        other.count_ = nullptr;
+        return *this;
+    }
 };
 ;
 } // namespace my
