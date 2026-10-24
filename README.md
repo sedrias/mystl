@@ -9,9 +9,12 @@ A C++23 header-only library.
 - `my::vector` - dynamic array: `push_back`, `pop_back`, `[]`, `at()`, `reserve`, `begin`/`end`, initializer list, copy and move
 - `my::shared_ptr` and `my::weak_ptr` - reference-counted smart pointers: shared ownership with `use_count`, `*` and `->`, and a non-owning observer with `expired` and `lock`; copy and move
 
-## Planned
+## In progress
 
 - `string` - string class with small string optimization (SSO)
+
+## Planned
+
 - `hash_map` - hash table
 - `function` - type-erased callable wrapper
 
