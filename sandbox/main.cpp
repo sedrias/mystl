@@ -34,18 +34,26 @@ class string {
     }
     char& operator[](std::size_t index) { return ptr_[index]; }
     const char& operator[](std::size_t index) const { return ptr_[index]; }
+    string(const string& other) {
+        size_ = other.size();
+        ptr_ = new char[other.size() + 1];
+        capacity_ = size_;
+        for (std::size_t i{0}; i < size_; ++i) {
+            ptr_[i] = other[i];
+        }
+        ptr_[size_] = '\0';
+    }
 };
 } // namespace my
 
 int main() {
-    my::string str{"hello"};
+    my::string a{"hello"};
+    my::string b = a;
+    b[0] = 'z';
 
     std::cout << "====== TESTS ======" << '\n';
-    std::cout << "old str.c_str(): " << str.c_str() << '\n';
-    std::cout << "old str[1]:      " << str[1] << '\n';
-    str[1] = 'a';
-    std::cout << "new str[1]:      " << str[1] << '\n';
-    std::cout << "new str.c_str(): " << str.c_str() << '\n';
+    std::cout << "a.c_str(): " << a.c_str() << '\n';
+    std::cout << "b.c_str(): " << b.c_str() << '\n';
     std::cout << "====== TESTS ======" << '\n';
 
     return 0;
