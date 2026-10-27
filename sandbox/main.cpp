@@ -1,4 +1,5 @@
 #include <cstddef>
+#include <iostream>
 #include <utility>
 
 namespace my {
@@ -63,10 +64,34 @@ class string {
         return *this;
     }
     string(string&& other) noexcept { *this = std::move(other); }
+    void reserve(std::size_t n) {
+        if (n > capacity_) {
+            char* new_data{new char[n + 1]};
+            for (std::size_t i{0}; i < size_; ++i) {
+                new_data[i] = ptr_[i];
+            }
+            delete[] ptr_;
+            ptr_ = new_data;
+            capacity_ = n;
+            new_data[size_] = '\0';
+        }
+    }
+    void push_back(const char c) {
+        if (size_ == capacity_) {
+            std::size_t new_capacity{capacity_ == 0 ? 1 : capacity_ * 2};
+            reserve(new_capacity);
+        }
+        ptr_[size_] = c;
+        ++size_;
+        ptr_[size_] = '\0';
+    }
 };
 } // namespace my
 
 int main() {
-    my::string a{"hello"};
+    my::string s{"hell"};
+    std::cout << "old s.c_str():    " << s.c_str() << '\n';
+    s.push_back('o');
+    std::cout << "new s.c_str():    " << s.c_str() << '\n';
     return 0;
 }
