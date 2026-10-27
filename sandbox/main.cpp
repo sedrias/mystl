@@ -32,16 +32,20 @@ class string {
         }
         return ptr_;
     }
+    char& operator[](std::size_t index) { return ptr_[index]; }
+    const char& operator[](std::size_t index) const { return ptr_[index]; }
 };
 } // namespace my
 
 int main() {
-    my::string str{};
+    my::string str{"hello"};
 
     std::cout << "====== TESTS ======" << '\n';
-    std::cout << "str.capacity():  " << str.capacity() << '\n';
-    std::cout << "str.size():      " << str.size() << '\n';
-    std::cout << "str.c_str():     " << str.c_str() << '\n';
+    std::cout << "old str.c_str(): " << str.c_str() << '\n';
+    std::cout << "old str[1]:      " << str[1] << '\n';
+    str[1] = 'a';
+    std::cout << "new str[1]:      " << str[1] << '\n';
+    std::cout << "new str.c_str(): " << str.c_str() << '\n';
     std::cout << "====== TESTS ======" << '\n';
 
     return 0;
