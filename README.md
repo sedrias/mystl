@@ -8,10 +8,7 @@ A C++23 header-only library.
 - `my::unique_ptr` - smart pointer with exclusive ownership: move-only, supports `get`, `*`, `->`, `release` and `reset`
 - `my::vector` - dynamic array: `push_back`, `pop_back`, `[]`, `at()`, `reserve`, `begin`/`end`, initializer list, copy and move
 - `my::shared_ptr` and `my::weak_ptr` - reference-counted smart pointers: shared ownership with `use_count`, `*` and `->`, and a non-owning observer with `expired` and `lock`; copy and move
-
-## In progress
-
-- `string` - string class with small string optimization (SSO)
+- `my::string` - string class with small string optimization (SSO): `push_back`, `[]`, `reserve`, `c_str`, copy and move
 
 ## Planned
 
@@ -52,6 +49,17 @@ my::weak_ptr<int> w{s};
 if (!w.expired()) {
     auto p = w.lock();
 }
+```
+
+### string
+
+```cpp
+#include <mystl/string.hpp>
+#include <iostream> // needed for std::cout
+
+my::string s{"hello"}; // hello
+s.push_back('!'); 
+std::cout << s.c_str() << '\n'; // hello!
 ```
 
 ## Build
