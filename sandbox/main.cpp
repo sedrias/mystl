@@ -1,5 +1,5 @@
 #include <cstddef>
-#include <iostream>
+#include <utility>
 
 namespace my {
 class string {
@@ -49,18 +49,24 @@ class string {
         ptr_[size_] = '\0';
         return *this;
     }
+    string& operator=(string&& other) noexcept {
+        if (this == &other) {
+            return *this;
+        }
+        delete[] ptr_;
+        ptr_ = other.ptr_;
+        other.ptr_ = nullptr;
+        size_ = other.size_;
+        other.size_ = 0;
+        capacity_ = other.capacity_;
+        other.capacity_ = 0;
+        return *this;
+    }
+    string(string&& other) noexcept { *this = std::move(other); }
 };
 } // namespace my
 
 int main() {
     my::string a{"hello"};
-    my::string b = a;
-    b[0] = 'z';
-
-    std::cout << "====== TESTS ======" << '\n';
-    std::cout << "a.c_str(): " << a.c_str() << '\n';
-    std::cout << "b.c_str(): " << b.c_str() << '\n';
-    std::cout << "====== TESTS ======" << '\n';
-
     return 0;
 }
