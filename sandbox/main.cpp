@@ -23,15 +23,26 @@ class string {
         ptr_[len] = '\0';
     }
     ~string() { delete[] ptr_; }
+    string() = default;
     [[nodiscard]] std::size_t capacity() const { return capacity_; }
     [[nodiscard]] std::size_t size() const { return size_; }
-    [[nodiscard]] const char* c_str() const { return ptr_; }
+    [[nodiscard]] const char* c_str() const {
+        if (ptr_ == nullptr) {
+            return "";
+        }
+        return ptr_;
+    }
 };
 } // namespace my
 
 int main() {
-    my::string str{"hello"};
-    std::cout << "str.size(): " << str.size() << '\n';
-    std::cout << "str.c_str(): " << str.c_str() << '\n';
+    my::string str{};
+
+    std::cout << "====== TESTS ======" << '\n';
+    std::cout << "str.capacity():  " << str.capacity() << '\n';
+    std::cout << "str.size():      " << str.size() << '\n';
+    std::cout << "str.c_str():     " << str.c_str() << '\n';
+    std::cout << "====== TESTS ======" << '\n';
+
     return 0;
 }
