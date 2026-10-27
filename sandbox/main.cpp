@@ -34,7 +34,12 @@ class string {
     }
     char& operator[](std::size_t index) { return ptr_[index]; }
     const char& operator[](std::size_t index) const { return ptr_[index]; }
-    string(const string& other) {
+    string(const string& other) { *this = other; }
+    string& operator=(const string& other) {
+        if (this == &other) {
+            return *this;
+        }
+        delete[] ptr_;
         size_ = other.size();
         ptr_ = new char[other.size() + 1];
         capacity_ = size_;
@@ -42,6 +47,7 @@ class string {
             ptr_[i] = other[i];
         }
         ptr_[size_] = '\0';
+        return *this;
     }
 };
 } // namespace my
