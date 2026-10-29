@@ -13,6 +13,11 @@ template <typename K, typename V> class hash_map {
     Node** buckets_{};
 
   public:
+    hash_map() {
+        bucket_count_ = 8;
+        buckets_ = new Node* [bucket_count_] {};
+    }
+    ~hash_map() { delete[] buckets_; }
 };
 } // namespace my
 
