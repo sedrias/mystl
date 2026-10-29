@@ -1,4 +1,5 @@
 #include <cstddef>
+#include <functional>
 
 namespace my {
 template <typename K, typename V> class hash_map {
@@ -12,16 +13,38 @@ template <typename K, typename V> class hash_map {
     std::size_t bucket_count_{};
     Node** buckets_{};
 
+    std::size_t bucket_index(const K& key) const { return std::hash<K>{}(key) % bucket_count_; }
+
   public:
     hash_map() {
         bucket_count_ = 8;
         buckets_ = new Node* [bucket_count_] {};
     }
-    ~hash_map() { delete[] buckets_; }
+    ~hash_map() {
+        for (std::size_t i{0}; i < bucket_count_; ++i) {
+            Node* cur = buckets_[i];
+            while (cur != nullptr) {
+                Node* tmp = cur->next_;
+                delete cur;
+                cur = tmp;
+            }
+        }
+        delete[] buckets_;
+    }
+    void insert(const K& key, const V& value) {
+        std::size_t index = bucket_index(key);
+        Node* node = new Node{key, value, nullptr};
+        node->next_ = buckets_[index];
+        buckets_[index] = node;
+        ++size_;
+    }
 };
 } // namespace my
 
 int main() {
     my::hash_map<int, int> m;
+    m.insert(1, 10);
+    m.insert(2, 20);
+    m.insert(3, 30);
     return 0;
 }
