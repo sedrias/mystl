@@ -10,9 +10,12 @@ A C++23 header-only library.
 - `my::shared_ptr` and `my::weak_ptr` - reference-counted smart pointers: shared ownership with `use_count`, `*` and `->`, and a non-owning observer with `expired` and `lock`; copy and move
 - `my::string` - string class with small string optimization (SSO): `push_back`, `[]`, `reserve`, `c_str`, copy and move
 
+## In progress
+
+- `my::hash_map` - hash table that stores key-value pairs and finds a value by its key quickly, without scanning
+
 ## Planned
 
-- `hash_map` - hash table
 - `function` - type-erased callable wrapper
 
 ## Usage
