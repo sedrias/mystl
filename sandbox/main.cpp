@@ -15,3 +15,8 @@ template <typename K, typename V> class hash_map {
   public:
 };
 } // namespace my
+
+int main() {
+    my::hash_map<int, int> m;
+    return 0;
+}
