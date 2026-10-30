@@ -1,5 +1,6 @@
 #include <cstddef>
 #include <functional>
+#include <iostream>
 
 namespace my {
 template <typename K, typename V> class hash_map {
@@ -38,6 +39,17 @@ template <typename K, typename V> class hash_map {
         buckets_[index] = node;
         ++size_;
     }
+    V* find(const K& key) {
+        std::size_t index = bucket_index(key);
+        Node* cur = buckets_[index];
+        while (cur != nullptr) {
+            if (cur->key_ == key) {
+                return &cur->value_;
+            }
+            cur = cur->next_;
+        }
+        return nullptr;
+    }
 };
 } // namespace my
 
@@ -46,5 +58,12 @@ int main() {
     m.insert(1, 10);
     m.insert(2, 20);
     m.insert(3, 30);
+    int* p = m.find(2);
+    if (p != nullptr) {
+        std::cout << *p << ' ';
+    }
+    if (m.find(99) == nullptr) {
+        std::cout << "no" << ' ';
+    }
     return 0;
 }
