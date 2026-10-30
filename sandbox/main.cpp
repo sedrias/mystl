@@ -33,6 +33,11 @@ template <typename K, typename V> class hash_map {
         delete[] buckets_;
     }
     void insert(const K& key, const V& value) {
+        V* p{find(key)};
+        if (p != nullptr) {
+            *p = value;
+            return;
+        }
         std::size_t index = bucket_index(key);
         Node* node = new Node{key, value, nullptr};
         node->next_ = buckets_[index];
@@ -58,12 +63,8 @@ int main() {
     m.insert(1, 10);
     m.insert(2, 20);
     m.insert(3, 30);
-    int* p = m.find(2);
-    if (p != nullptr) {
-        std::cout << *p << ' ';
-    }
-    if (m.find(99) == nullptr) {
-        std::cout << "no" << ' ';
-    }
+    std::cout << *m.find(2) << ' ';
+    m.insert(2, 99);
+    std::cout << *m.find(2) << ' ';
     return 0;
 }
