@@ -58,6 +58,29 @@ template <typename K, typename V> class hash_map {
     }
     [[nodiscard]] std::size_t size() const { return size_; }
     [[nodiscard]] bool empty() const { return size_ == 0; }
+    bool erase(const K& key) {
+        std::size_t index = bucket_index(key);
+        Node* cur = buckets_[index];
+        Node* prev = nullptr;
+        while (cur != nullptr) {
+            if (cur->key_ == key) {
+                break;
+            }
+            prev = cur;
+            cur = cur->next_;
+        }
+        if (cur == nullptr) {
+            return false;
+        }
+        if (prev == nullptr) {
+            buckets_[index] = cur->next_;
+        } else {
+            prev->next_ = cur->next_;
+        }
+        delete cur;
+        --size_;
+        return true;
+    }
 };
 } // namespace my
 
@@ -66,12 +89,12 @@ int main() {
     m.insert(1, 10);
     m.insert(2, 20);
     m.insert(3, 30);
-    m.insert(2, 99);
-    std::cout << "m.size():  " << m.size() << '\n';
-    my::hash_map<int, int> e;
     std::cout << std::boolalpha;
-    std::cout << "m.empty(): " << m.empty() << '\n';
-    std::cout << "e.empty(): " << e.empty() << '\n';
+    std::cout << "m.erase(99): " << m.erase(99) << '\n';
+    std::cout << "m.erase(2):  " << m.erase(2) << '\n';
+    std::cout << "m.find(2):   " << m.find(2) << '\n';
+    std::cout << "m.find(1):   " << *m.find(1) << '\n';
+    std::cout << "m.find(3):   " << *m.find(3) << '\n';
     std::cout << std::noboolalpha;
     return 0;
 }
