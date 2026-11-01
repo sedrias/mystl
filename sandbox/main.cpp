@@ -1,5 +1,6 @@
 #include <cstddef>
 #include <functional>
+#include <ios>
 #include <iostream>
 
 namespace my {
@@ -55,6 +56,8 @@ template <typename K, typename V> class hash_map {
         }
         return nullptr;
     }
+    [[nodiscard]] std::size_t size() const { return size_; }
+    [[nodiscard]] bool empty() const { return size_ == 0; }
 };
 } // namespace my
 
@@ -63,8 +66,12 @@ int main() {
     m.insert(1, 10);
     m.insert(2, 20);
     m.insert(3, 30);
-    std::cout << *m.find(2) << ' ';
     m.insert(2, 99);
-    std::cout << *m.find(2) << ' ';
+    std::cout << "m.size():  " << m.size() << '\n';
+    my::hash_map<int, int> e;
+    std::cout << std::boolalpha;
+    std::cout << "m.empty(): " << m.empty() << '\n';
+    std::cout << "e.empty(): " << e.empty() << '\n';
+    std::cout << std::noboolalpha;
     return 0;
 }
