@@ -99,7 +99,24 @@ template <typename K, typename V> class hash_map {
         --size_;
         return true;
     }
+    hash_map(const hash_map& other) {
+        bucket_count_ = other.bucket_count_;
+        buckets_ = new Node* [bucket_count_] {};
+        for (std::size_t i{0}; i < other.bucket_count_; ++i) {
+            Node* cur = other.buckets_[i];
+            while (cur != nullptr) {
+                insert(cur->key_, cur->value_);
+                cur = cur->next_;
+            }
+        }
+    }
 };
 } // namespace my
 
-int main() { return 0; }
+int main() {
+    my::hash_map<int, int> a;
+    a.insert(1, 10);
+    a.insert(2, 20);
+    my::hash_map<int, int> b = a;
+    return 0;
+}
