@@ -119,6 +119,20 @@ template <typename K, typename V> class hash_map {
         }
         return *this;
     }
+    hash_map(hash_map&& other) noexcept { *this = std::move(other); }
+    hash_map& operator=(hash_map&& other) noexcept {
+        if (this == &other) {
+            return *this;
+        }
+        clear();
+        bucket_count_ = other.bucket_count_;
+        size_ = other.size_;
+        buckets_ = other.buckets_;
+        other.bucket_count_ = 0;
+        other.size_ = 0;
+        other.buckets_ = nullptr;
+        return *this;
+    }
 };
 } // namespace my
 
