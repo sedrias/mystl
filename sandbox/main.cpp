@@ -32,12 +32,7 @@ template <typename K, typename V> class hash_map {
         bucket_count_ = new_count;
     }
 
-  public:
-    hash_map() {
-        bucket_count_ = 8;
-        buckets_ = new Node* [bucket_count_] {};
-    }
-    ~hash_map() {
+    void clear() {
         for (std::size_t i{0}; i < bucket_count_; ++i) {
             Node* cur = buckets_[i];
             while (cur != nullptr) {
@@ -48,6 +43,13 @@ template <typename K, typename V> class hash_map {
         }
         delete[] buckets_;
     }
+
+  public:
+    hash_map() {
+        bucket_count_ = 8;
+        buckets_ = new Node* [bucket_count_] {};
+    }
+    ~hash_map() { clear(); }
     void insert(const K& key, const V& value) {
         V* p{find(key)};
         if (p != nullptr) {
@@ -99,9 +101,15 @@ template <typename K, typename V> class hash_map {
         --size_;
         return true;
     }
-    hash_map(const hash_map& other) {
+    hash_map(const hash_map& other) { *this = other; }
+    hash_map& operator=(const hash_map& other) {
+        if (this == &other) {
+            return *this;
+        }
+        clear();
         bucket_count_ = other.bucket_count_;
         buckets_ = new Node* [bucket_count_] {};
+        size_ = 0;
         for (std::size_t i{0}; i < other.bucket_count_; ++i) {
             Node* cur = other.buckets_[i];
             while (cur != nullptr) {
@@ -109,6 +117,7 @@ template <typename K, typename V> class hash_map {
                 cur = cur->next_;
             }
         }
+        return *this;
     }
 };
 } // namespace my
