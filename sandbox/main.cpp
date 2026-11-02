@@ -1,7 +1,5 @@
 #include <cstddef>
 #include <functional>
-#include <ios>
-#include <iostream>
 
 namespace my {
 template <typename K, typename V> class hash_map {
@@ -16,6 +14,23 @@ template <typename K, typename V> class hash_map {
     Node** buckets_{};
 
     std::size_t bucket_index(const K& key) const { return std::hash<K>{}(key) % bucket_count_; }
+
+    void rehash(const std::size_t new_count) {
+        Node** new_buckets = new Node* [new_count] {};
+        for (std::size_t i{0}; i < bucket_count_; ++i) {
+            Node* cur = buckets_[i];
+            while (cur != nullptr) {
+                Node* tmp = cur->next_;
+                std::size_t new_index = std::hash<K>{}(cur->key_) % new_count;
+                cur->next_ = new_buckets[new_index];
+                new_buckets[new_index] = cur;
+                cur = tmp;
+            }
+        }
+        delete[] buckets_;
+        buckets_ = new_buckets;
+        bucket_count_ = new_count;
+    }
 
   public:
     hash_map() {
@@ -44,6 +59,9 @@ template <typename K, typename V> class hash_map {
         node->next_ = buckets_[index];
         buckets_[index] = node;
         ++size_;
+        if (size_ > bucket_count_) {
+            rehash(bucket_count_ * 2);
+        }
     }
     V* find(const K& key) {
         std::size_t index = bucket_index(key);
@@ -84,17 +102,4 @@ template <typename K, typename V> class hash_map {
 };
 } // namespace my
 
-int main() {
-    my::hash_map<int, int> m;
-    m.insert(1, 10);
-    m.insert(2, 20);
-    m.insert(3, 30);
-    std::cout << std::boolalpha;
-    std::cout << "m.erase(99): " << m.erase(99) << '\n';
-    std::cout << "m.erase(2):  " << m.erase(2) << '\n';
-    std::cout << "m.find(2):   " << m.find(2) << '\n';
-    std::cout << "m.find(1):   " << *m.find(1) << '\n';
-    std::cout << "m.find(3):   " << *m.find(3) << '\n';
-    std::cout << std::noboolalpha;
-    return 0;
-}
+int main() { return 0; }
