@@ -10,10 +10,7 @@ A C++23 header-only library.
 - `my::shared_ptr` and `my::weak_ptr` - reference-counted smart pointers: shared ownership with `use_count`, `*` and `->`, and a non-owning observer with `expired` and `lock`; copy and move
 - `my::string` - string class with small string optimization (SSO): `push_back`, `[]`, `reserve`, `c_str`, copy and move
 - `my::hash_map` - hash table that stores key-value pairs and finds a value by its key quickly, without scanning: `insert`, `find`, `erase`, `size`, `empty`; copy and move
-
-## In progress
-
-- `my::function` - a box that can hold a lambda, a regular function or any other callable, and call it the same way
+- `my::function` - a box that can hold a lambda, a regular function or any other callable with a given signature, like `my::function<int(int)>`: call it with `()`; copy and move
 
 ## Usage
 
@@ -100,6 +97,17 @@ int main() {
     h.erase(1);
     h.size();
     h.empty();
+    return 0;
+}
+```
+
+### function
+```cpp
+#include <mystl/function.hpp>
+
+int main() {
+    my::function<int(int)> f{[](int x) { return x * 2; }};
+    f(10);
     return 0;
 }
 ```
