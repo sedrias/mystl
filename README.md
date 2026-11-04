@@ -11,9 +11,9 @@ A C++23 header-only library.
 - `my::string` - string class with small string optimization (SSO): `push_back`, `[]`, `reserve`, `c_str`, copy and move
 - `my::hash_map` - hash table that stores key-value pairs and finds a value by its key quickly, without scanning: `insert`, `find`, `erase`, `size`, `empty`; copy and move
 
-## Planned
+## In progress
 
-- `function` - type-erased callable wrapper
+- `my::function` - a box that can hold a lambda, a regular function or any other callable, and call it the same way
 
 ## Usage
 
